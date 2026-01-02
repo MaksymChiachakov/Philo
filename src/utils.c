@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 
 #include "philo.h"
-
+// Наш ft_atoi для роботи з аргументами нашої програми на самому старті
 int	ft_atoi(const char *str)
 {
 	int	i;
@@ -36,7 +36,7 @@ int	ft_atoi(const char *str)
 	}
 	return (result * sign);
 }
-
+// Функція для отримання актуального часу
 long	get_time(void)
 {
 	struct timeval	tv;
@@ -44,7 +44,7 @@ long	get_time(void)
 	gettimeofday(&tv, NULL);
 	return ((tv.tv_sec * 1000) + (tv.tv_usec / 1000));
 }
-
+// Функція для очікування (сну)
 void	ft_usleep(long time)
 {
 	long	start;
@@ -53,28 +53,29 @@ void	ft_usleep(long time)
 	while ((get_time() - start) < time)
 		usleep(500);
 }
-
+// Функція для афішування статусу
 void	print_status(t_philo *philo, char *status)
 {
 	long	timestamp;
-
-	pthread_mutex_lock(&philo->data->print);
+	// Блокування змінних для подальшої коректної роботи з ними
+	pthread_mutex_lock(&philo->data->print); 
 	pthread_mutex_lock(&philo->data->death);
-	if (!philo->data->dead)
+	if (!philo->data->dead) // Якщо наш філософ живий
 	{
-		timestamp = get_time() - philo->data->start_time;
-		printf("%ld %d %s\n", timestamp, philo->id, status);
+		timestamp = get_time() - philo->data->start_time; // Отримуємо актуальний час
+		printf("%ld %d %s\n", timestamp, philo->id, status); // Саме афішування
 	}
+	// Після завершення роботи з нашими змінними, ми розблоковуємо наші змінні для інших функцій
 	pthread_mutex_unlock(&philo->data->death);
 	pthread_mutex_unlock(&philo->data->print);
 }
-
+// Функція для перевірки чи наш філософ мертвий
 int	is_dead(t_data *data)
 {
-	int	dead;
+	int	dead; // Створення змінної (смерть)
 
-	pthread_mutex_lock(&data->death);
-	dead = data->dead;
-	pthread_mutex_unlock(&data->death);
-	return (dead);
+	pthread_mutex_lock(&data->death); // Те саме блокування змінної
+	dead = data->dead; // Занесення у нього значення
+	pthread_mutex_unlock(&data->death); // Розблокування змінної
+	return (dead); // Повернення значення
 }

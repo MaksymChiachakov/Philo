@@ -14,18 +14,18 @@
 
 int	main(int ac, char **av)
 {
-	t_data	data;
+	t_data	data; // Створення дати, та присвоєння їй значень у подальшому завдяки символу &
 
-	if (ac < 5 || ac > 6)
+	if (ac < 5 || ac > 6) // Перевірка кількості аргументів
 		return (printf("Error: wrong number of arguments\n"), 1);
-	if (init_data(&data, ac, av))
-		return (1);
-	if (init_forks(&data))
-		return (free_all(&data), 1);
-	if (init_philos(&data))
-		return (free_all(&data), 1);
-	if (start_simulation(&data))
-		return (free_all(&data), 1);
-	free_all(&data);
-	return (0);
+	if (init_data(&data, ac, av)) // Якщо при результаті отримали 1
+		return (1); // То повертаємо 1
+	if (init_forks(&data)) // Якщо при результаті отримали 1
+		return (free_all(&data), 1); // free пам'ять та повертаємо 1
+	if (init_philos(&data)) // Якщо при результаті отримали 1
+		return (free_all(&data), 1); // free пам'ять та повертаємо 1
+	if (start_simulation(&data)) // Якщо при результаті отримали 1
+		return (free_all(&data), 1); // free пам'ять та повертаємо 1
+	free_all(&data); // free пам'ять у любому з випадків для уникнення leaks
+	return (0); // Кінец, повернення 0
 }
